@@ -48,8 +48,9 @@
 								<fmt:formatNumber value="${cartLineInfo.productInfo.price }" type = "currency"/>
 							</span>
 						</li>
-						<li>Quantity:
-							<form:input path="cartLineInfos[${varStatus.index }].quantity" /> <!-- this mean cartLineInfos[index(number)].quantity  -->
+						<li>Quantity: <%-- ${cartLineInfo.quantity } --%> <!--show the number only  -->
+							<form:input path="cartLineInfos[${varStatus.index }].quantity" /> <!-- this mean cartLineInfos[index(number)].quantity   -->
+							<!--  path to get the variable input, use varStatus to point to the variable-->
 							<%-- <form:input path="carLineInfo.quantity" /> --%>
 						</li>
 						<li>Subtotal:
