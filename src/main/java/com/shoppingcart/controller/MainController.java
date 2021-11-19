@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,12 +22,16 @@ import com.shoppingcart.model.CustomerInfo;
 import com.shoppingcart.model.PaginationResult;
 import com.shoppingcart.model.ProductInfo;
 import com.shoppingcart.util.Utils;
+import com.shoppingcart.validator.CustomerInfoValidator;
 
 @Controller
 public class MainController {
 	
 	@Autowired
 	private ProductDAO productDAO;
+	
+	@Autowired
+	private CustomerInfoValidator customerInfoValidator;
 	
 	//Danh sách sản phẩm
 	@RequestMapping(value = {"/productList"}, method = RequestMethod.GET)
@@ -129,6 +135,53 @@ public class MainController {
 		
 		model.addAttribute("customerForm", customerInfo);
 		return "shoppingCartCustomer";
+	}
+	
+	// POST: Save thông tin khách hàng.
+	@RequestMapping(value = {"shoppingCartCustomer"}, method = RequestMethod.POST)
+	public String shoppingCartCustomerSave(HttpServletRequest request, Model model,
+			@ModelAttribute("customerForm") @Validated CustomerInfo customerForm, BindingResult result) {
+		customerInfoValidator.validate(customerForm, result);
+		// Kết quả Validate CustomerInfo.
+		if(result.hasErrors()) {
+			customerForm.setValid(false);
+			return "shoppingCartCustomer";
+		}
+		
+		customerForm.setValid(true);
+		CartInfo cartInfo = Utils.getCartInfoInSession(request);
+		cartInfo.setCustomerInfo(customerForm);
+		
+		// Chuyển hướng sang trang xác nhận.
+		return "redirect:/shoppingCartConfirmation";
+	}
+	
+	// GET Xem lại thông tin để xác nhận
+	@RequestMapping(value = {"/shoppingCartConfirmation"}, method = RequestMethod.GET)
+	public String shoppingCartConfirmationReview(HttpServletRequest request, Model model) {
+		CartInfo cartInfo = Utils.getCartInfoInSession(request);
+		
+		//chưa mua mặt hàng nào
+		if(cartInfo.isEmpty()) {
+			// Chuyển tới trang danh sách giỏi hàng
+			return "redirect:/shoppingCart";
+		}else if(!cartInfo.isValidCustomer()) {
+			// Chuyển tới trang nhập thông tin khách hàng.
+			return "redirect:/shoppingCartCustomer";
+		}
+		return "shoppingCartConfirmation";
+		
+	}
+	
+	public String shoppingCartConfirmationSave(HttpServletRequest request, Model model) {
+		CartInfo cartInfo = Utils.getCartInfoInSession(request);
+		
+		if(cartInfo.isEmpty()) {
+			return "redirect:/shoppingCart";
+		}else if(!cartInfo.isValidCustomer()) {
+			return "redirect:/shoppingCartCustomer";
+		}
+		
 	}
 
 }

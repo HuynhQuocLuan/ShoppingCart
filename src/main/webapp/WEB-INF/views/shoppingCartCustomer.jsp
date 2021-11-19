@@ -25,13 +25,12 @@
 
 	<div class="page-title">Enter Customer Information</div>
 
-	<form:form method="POST" modelAttribute="customerForm"
-		action="${contextPath }/shoppingCartCustomer">
+	<form:form method="POST" modelAttribute="customerForm" action="${contextPath }/shoppingCartCustomer">
 		<table>
 			<tr>
 				<td>Name *</td>
 				<td><form:input path="name" /></td>
-				<td><form:errors path="name" class="error-message" /></td>
+				<td><form:errors path="name" cssClass="error-message" /></td>
 			</tr>
 			<tr>
 				<td>Email *</td>
@@ -55,7 +54,7 @@
 				<td>&nbsp;</td>
 				<td>
 					<input type="submit" value="Submit" /> 
-					<input type="reset"	value="Reset" />
+					<input type="reset"	value="Reset" onclick="customReset();"/>
 				</td>
 			</tr>
 		</table>

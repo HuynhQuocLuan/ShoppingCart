@@ -29,7 +29,7 @@ public class WebMvcConfig {
 	@Bean
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-		messageSource.setBasename("classpath:messages");
+		messageSource.setBasename("classpath:messages/validator");
 		messageSource.setDefaultEncoding("UTF-8");
 		return messageSource;
 
