@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.shoppingcart.dao.OrderDAO;
 import com.shoppingcart.dao.ProductDAO;
 import com.shoppingcart.entity.Product;
 import com.shoppingcart.model.CartInfo;
@@ -29,6 +32,9 @@ public class MainController {
 	
 	@Autowired
 	private ProductDAO productDAO;
+	
+	@Autowired
+	private OrderDAO orderDAO;
 	
 	@Autowired
 	private CustomerInfoValidator customerInfoValidator;
@@ -173,15 +179,49 @@ public class MainController {
 		
 	}
 	
+	// POST: gửi đơn hàng (Save)
+	@RequestMapping(value = {"/shoppingCartConfirmation"}, method = RequestMethod.POST)
+//	@Transactional(propagation = Propagation.NEVER) // Tránh ngoại lệ: UnexpectedRollbackException
 	public String shoppingCartConfirmationSave(HttpServletRequest request, Model model) {
 		CartInfo cartInfo = Utils.getCartInfoInSession(request);
 		
+		// Chưa mua mặt hàng nào.
 		if(cartInfo.isEmpty()) {
+			// Chuyển tới trang danh sách giỏ hàng
 			return "redirect:/shoppingCart";
 		}else if(!cartInfo.isValidCustomer()) {
+			// Chuyển tới trang nhập thông tin khách hàng.
 			return "redirect:/shoppingCartCustomer";
 		}
 		
+		try {
+			orderDAO.saveOrder(cartInfo);
+		} catch (Exception e) {
+			// Cần thiết: Propagation.NEVER?
+			return "shoppingCartConfirmation";
+		}
+		
+		// Xóa giỏ hàng khori  session
+		Utils.removeCartInfoInSession(request);
+		
+		// Lưu thông tin đơn hàng đã xác nhận mua.
+		Utils.storeLastOrderedCartInfoInSession(request,  cartInfo);
+		
+		// Chuyển hướng tới trang hoàn thành mua hàng.
+		return "redirect:/shoppingCartFinalize";
 	}
+	
+	@RequestMapping(value = {"/shoppingCartFinalize"}, method = RequestMethod.GET)
+	public String shoppingCartFinalize(HttpServletRequest request, Model model) {
+		CartInfo lastOrderedCart = Utils.getLastOrderedCartInfoInSession(request);
+		
+		if (lastOrderedCart == null) {
+			return "redirect:/shoppingCart";
+		}
+		
+		return "shoppingCartFinalize";
+	}
+	
+	
 
 }

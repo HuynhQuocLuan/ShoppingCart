@@ -8,14 +8,20 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shoppingcart.dao.OrderDAO;
 import com.shoppingcart.dao.ProductDAO;
 import com.shoppingcart.entity.Order;
+import com.shoppingcart.entity.OrderDetail;
+import com.shoppingcart.entity.Product;
 import com.shoppingcart.model.CartInfo;
 import com.shoppingcart.model.CartLineInfo;
 import com.shoppingcart.model.CustomerInfo;
 
+@Repository
+@Transactional
 public class OrderDAOImpl implements OrderDAO{
 	
 	@Autowired
@@ -51,10 +57,24 @@ public class OrderDAOImpl implements OrderDAO{
 		order.setCustomerEmail(customerInfo.getEmail());
 		order.setCustomerPhone(customerInfo.getPhone());
 		order.setCustomerAddress(customerInfo.getAddress());
-		session.persist(order); 
+		session.persist(order); // Phải lưu trước khi orderDetail.setOrder(order). 
 		
 		List<CartLineInfo> cartLineInfos = cartInfo.getCartLineInfos();
-		
+		for (CartLineInfo cartLineInfo : cartLineInfos) {
+			OrderDetail orderDetail = new OrderDetail();
+			orderDetail.setId(UUID.randomUUID().toString());
+			orderDetail.setOrder(order);
+			orderDetail.setAmount(cartLineInfo.getAmount());
+			orderDetail.setPrice(cartLineInfo.getProductInfo().getPrice());
+			orderDetail.setQuantity(cartLineInfo.getQuantity());
+			
+			String code = cartLineInfo.getProductInfo().getCode();
+			Product product = productDAO.getProductByCode(code);
+			orderDetail.setProduct(product);
+			
+			session.persist(orderDetail);
+		}
+		cartInfo.setOrderNum(orderNum);
 		
 	}
 	
