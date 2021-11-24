@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.shoppingcart.dao.OrderDAO;
+
 import com.shoppingcart.dao.ProductDAO;
 import com.shoppingcart.entity.Order;
 import com.shoppingcart.entity.OrderDetail;
@@ -19,6 +20,8 @@ import com.shoppingcart.entity.Product;
 import com.shoppingcart.model.CartInfo;
 import com.shoppingcart.model.CartLineInfo;
 import com.shoppingcart.model.CustomerInfo;
+import com.shoppingcart.model.OrderInfo;
+import com.shoppingcart.model.PaginationResult;
 
 @Repository
 @Transactional
@@ -76,6 +79,15 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		cartInfo.setOrderNum(orderNum);
 		
+	}
+
+	@Override
+	public PaginationResult<OrderInfo> getAllOrderInfos(int page, int maxResult, int maxNavigationPage) {
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "SELECT NEW " + OrderInfo.class.getName() + " (ORD.id, ORD.orderDate, ORD.orderNum, ORD.amount, ORD.customerName, ORD.customerAddress, "
+				+ "ORD.customerEmail, ORD.customerPhone) FROM Order ORD ORDER BY ORD.orderNum ASC"; // DESC
+		Query<OrderInfo> query = session.createQuery(hql);
+		return new PaginationResult<OrderInfo>(query, page, maxResult, maxNavigationPage);
 	}
 	
 	

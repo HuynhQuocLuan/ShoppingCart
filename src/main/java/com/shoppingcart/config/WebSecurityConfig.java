@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.loginPage("/login")
 			.defaultSuccessUrl("/accountInfo")
 			.failureUrl("/login?error=true")
-			.usernameParameter("username")
+			.usernameParameter("userName")
 			.passwordParameter("password")
 			.and()
 			.logout()
