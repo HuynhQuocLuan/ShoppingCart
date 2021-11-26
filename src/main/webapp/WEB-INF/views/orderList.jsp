@@ -53,7 +53,7 @@
 		</c:forEach>
 	</table>
 	
-	<c:if test="${paginationOrderInfos.totalPages >1 }">
+	<c:if test="${paginationOrderInfos.totalPages > 1 }">
 		<div class = "page-navigator">
 			<c:forEach	items = "${paginationOrderInfos.navigationPages}" var = "page">
 				<c:if test = "${page != -1 }">

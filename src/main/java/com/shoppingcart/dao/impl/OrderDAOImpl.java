@@ -20,6 +20,7 @@ import com.shoppingcart.entity.Product;
 import com.shoppingcart.model.CartInfo;
 import com.shoppingcart.model.CartLineInfo;
 import com.shoppingcart.model.CustomerInfo;
+import com.shoppingcart.model.OrderDetailInfo;
 import com.shoppingcart.model.OrderInfo;
 import com.shoppingcart.model.PaginationResult;
 
@@ -32,6 +33,9 @@ public class OrderDAOImpl implements OrderDAO{
 	
 	@Autowired
 	private ProductDAO productDAO;
+	
+	@Autowired
+	private OrderDAO orderDAO;
 	
 	private int getMaxOrderNum() {
 		Session session = sessionFactory.getCurrentSession();
@@ -85,9 +89,43 @@ public class OrderDAOImpl implements OrderDAO{
 	public PaginationResult<OrderInfo> getAllOrderInfos(int page, int maxResult, int maxNavigationPage) {
 		Session session = sessionFactory.getCurrentSession();
 		String hql = "SELECT NEW " + OrderInfo.class.getName() + " (ORD.id, ORD.orderDate, ORD.orderNum, ORD.amount, ORD.customerName, ORD.customerAddress, "
-				+ "ORD.customerEmail, ORD.customerPhone) FROM Order ORD ORDER BY ORD.orderNum ASC"; // DESC
+				+ "ORD.customerEmail, ORD.customerPhone) FROM Order ORD ORDER BY ORD.orderNum ASC"; // DESC: 
 		Query<OrderInfo> query = session.createQuery(hql);
 		return new PaginationResult<OrderInfo>(query, page, maxResult, maxNavigationPage);
+	}
+	
+	public Order getOrderById(String orderId) {
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "SELECT ORD FROM Order ORD WHERE ORD.id = :ORDERID";
+		Query<Order> query = session.createQuery(hql);
+		query.setParameter("ORDERID", orderId);
+		Order order = (Order) query.uniqueResult();
+		return order;
+		
+	}
+
+	@Override
+	public OrderInfo getOrderInfoById(String orderId) {
+		Order order = getOrderById(orderId);
+		if (order == null) {
+			return null;
+		}
+		OrderInfo orderInfo = new OrderInfo(order.getId(), order.getOrderDate(), order.getOrderNum(), order.getAmount(),
+				order.getCustomerName(), order.getCustomerAddress(), order.getCustomerEmail(),
+				order.getCustomerPhone());
+		
+		return orderInfo;
+	}
+
+	@Override
+	public List<OrderDetailInfo> getAllOrderDetailInfos(String orderId) {
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "SELECT NEW " + OrderDetailInfo.class.getName() + " (ORD.id, ORD.product.code, ORD.product.name, "
+				+ "ORD.quantity, ORD.price, ORD.amount) FROM OrderDetail ORD WHERE ORD.order.id = :ORDERID"; // ORD.order.id = Orderdetail.order.id
+		Query<OrderDetailInfo> query = session.createQuery(hql);
+		query.setParameter("ORDERID", orderId);
+		List<OrderDetailInfo> orderDetailInfos = query.list();
+		return orderDetailInfos;
 	}
 	
 	

@@ -1,5 +1,7 @@
 package com.shoppingcart.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.shoppingcart.dao.OrderDAO;
+import com.shoppingcart.model.OrderDetailInfo;
 import com.shoppingcart.model.OrderInfo;
 import com.shoppingcart.model.PaginationResult;
 
@@ -46,18 +49,34 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = {"/orderList"}, method = RequestMethod.GET)
-	public String orderList(Model model, @RequestParam(value = "page", defaultValue = "1") String pageStr) {
-		int page =1;
-		try {
-			page = Integer.parseInt(pageStr);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		
+	public String orderList(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+//		int page =1;
+//		try {
+//			page = Integer.parseInt(pageStr);
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		}
+//		
 		final int MAX_RESULT = 5;
 		final int MAX_NAVIGATION_PAGE = 0;
 		PaginationResult<OrderInfo> paginationOrderInfos = orderDAO.getAllOrderInfos(page, MAX_RESULT, MAX_NAVIGATION_PAGE);
 		model.addAttribute("paginationOrderInfos", paginationOrderInfos);
 		return "orderList";
+	}
+	
+	@RequestMapping(value = {"/order"}, method = RequestMethod.GET)
+	public String orderView(Model model, @RequestParam("orderId") String orderId) {
+		OrderInfo orderInfo = null;
+		if (orderId != null) {
+			orderInfo = orderDAO.getOrderInfoById(orderId);
+		} 
+		if (orderInfo == null) {
+			return "redirect:/orderList";
+		}
+		
+		List<OrderDetailInfo> orderDetailInfos = orderDAO.getAllOrderDetailInfos(orderId);
+		orderInfo.setOrderDetailInfos(orderDetailInfos);
+		model.addAttribute("orderInfo", orderInfo);
+		return "order";
 	}
 }
