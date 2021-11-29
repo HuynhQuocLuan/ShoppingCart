@@ -9,5 +9,9 @@ public interface ProductDAO {
 	public PaginationResult<ProductInfo> getAllProductInfos(int page, int maxResult, int maxNavigationPage, String likeName);
 	
 	public Product getProductByCode(String code);
+	
+	public ProductInfo getProductInfoByCode(String code);
+	
+	public void saveProductInfo(ProductInfo productInfo);
 
 }

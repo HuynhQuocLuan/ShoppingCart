@@ -1,6 +1,7 @@
 package com.shoppingcart.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -67,5 +68,49 @@ public class ProductDAOImpl implements ProductDAO{
 		Product product = (Product) query.uniqueResult();
 		return product;
 	}
+
+	@Override
+	public ProductInfo getProductInfoByCode(String code) {
+		Product product = getProductByCode(code);
+		if (product == null) {
+			return null;
+		}
+		ProductInfo productInfo = new ProductInfo(product.getCode(), product.getName(), product.getPrice());
+		return productInfo;
+	}
+
+	@Override
+	public void saveProductInfo(ProductInfo productInfo) {
+		Session session = sessionFactory.getCurrentSession();
+		String code = productInfo.getCode();
+		Product product = null;
+		boolean isNew = false;
+		
+		if (code != null) {
+			product = getProductByCode(code);
+		}
+		if (product == null) {
+			isNew = true;
+			product = new Product();
+			product.setCreateDate(new Date());
+		}
+		product.setCode(code);
+		product.setName(productInfo.getName());
+		product.setPrice(productInfo.getPrice());
+		
+		if (productInfo.getFileData() != null) {
+			byte [] image = productInfo.getFileData().getBytes();
+			if(image != null && image.length >0) {
+				product.setImage(image);
+			}
+		}
+		if(isNew) {
+			session.persist(product);
+		}
+		// If fail in database, it will throw out exception immedately
+		session.flush();
+	}
+
+	
 
 }
