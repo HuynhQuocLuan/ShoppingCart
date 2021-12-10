@@ -144,7 +144,7 @@ public class MainController {
 	}
 	
 	// POST: Save thông tin khách hàng.
-	@RequestMapping(value = {"shoppingCartCustomer"}, method = RequestMethod.POST)
+	@RequestMapping(value = {"/shoppingCartCustomer"}, method = RequestMethod.POST)
 	public String shoppingCartCustomerSave(HttpServletRequest request, Model model,
 			@ModelAttribute("customerForm") @Validated CustomerInfo customerForm, BindingResult result) {
 		customerInfoValidator.validate(customerForm, result);
@@ -201,7 +201,7 @@ public class MainController {
 			return "shoppingCartConfirmation";
 		}
 		
-		// Xóa giỏ hàng khori  session
+		// Xóa giỏ hàng khoi  session
 		Utils.removeCartInfoInSession(request);
 		
 		// Lưu thông tin đơn hàng đã xác nhận mua.
@@ -221,7 +221,5 @@ public class MainController {
 		
 		return "shoppingCartFinalize";
 	}
-	
-	
 
 }

@@ -20,11 +20,14 @@ public class Account implements Serializable {
 	@Column(name = "User_Name", length = 20, nullable = false)
 	private String userName;
 	
+	@Column(name = "Name", length = 225, nullable = false)
+	private String name;
+	
 	@Column(name = "Password", length = 20, nullable = false)
 	private String password;
 	
 	@Column(name = "Active", length = 1, nullable = false)
-	private boolean active;
+	private boolean active = true;
 	
 	@Column(name = "User_Role", length = 20, nullable = false)
 	private String userRole;
@@ -72,6 +75,16 @@ public class Account implements Serializable {
 	public void setUserRole(String userRole) {
 		this.userRole = userRole;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
 	
 	
 }

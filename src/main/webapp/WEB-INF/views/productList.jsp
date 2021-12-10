@@ -16,7 +16,9 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Product List</title>
-<link rel="stylesheet" href="${contextPath }/css/styles.css" type="text/css" >
+
+<link rel="stylesheet" type="text/css" href="${contextPath}/css/styles.css">
+
 </head>
 <body>
 	<jsp:include page = "_header.jsp" />
@@ -42,7 +44,7 @@
 				</li>
 				<security:authorize access="hasRole('ROLE_MANAGER')">
 					<li>
-						<a style = "color: red;" href="${contextPath }/product?code={productInfo.code}">Edit Product</a>
+						<a style = "color: red;" href="${contextPath }/product?code=${productInfo.code}">Edit Product</a>
 					</li>
 				</security:authorize>
 			</ul>

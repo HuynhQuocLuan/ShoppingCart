@@ -25,6 +25,7 @@
 
 <security:authorize access = "hasRole('ROLE_MANAGER')">
 	<a href = "${contextPath }/product">Create Product</a>
+	<a href = "${contextPath }/list">Account Information</a>
 	
 	
 </security:authorize>

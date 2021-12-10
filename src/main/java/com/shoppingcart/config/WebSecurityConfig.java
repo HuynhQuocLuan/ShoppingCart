@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.shoppingcart.authentication.MyDBAuthenticationService;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -20,20 +22,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //	@Autowired
 //	@Qualifier("userDetailsServiceImpl")
 //	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	@Qualifier("myDBAuthenticationService")
+	private MyDBAuthenticationService myDBAuthenticationService;
 
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-//	@Bean
-//	public AuthenticationProvider authProvider() {
-//		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-//		provider.setUserDetailsService(userDetailsService);
-//		provider.setPasswordEncoder(new BCryptPasswordEncoder());
-//
-//		return provider;
-//	}
+	@Bean
+	public AuthenticationProvider authProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(myDBAuthenticationService);
+		provider.setPasswordEncoder(new BCryptPasswordEncoder());
+
+		return provider;
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -60,11 +66,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		
-		auth.inMemoryAuthentication().withUser("employee").password("employee").authorities("ROLE_EMPLOYEE");
-		auth.inMemoryAuthentication().withUser("manager").password("manager").authorities("ROLE_MANAGER");
+//		
+//		auth.inMemoryAuthentication().withUser("employee").password("employee").authorities("ROLE_EMPLOYEE"); authentication in memory
+//		auth.inMemoryAuthentication().withUser("manager").password("manager").authorities("ROLE_MANAGER");
 //		auth.authenticationProvider(authProvider());
 //		auth.userDetailsService(userDetailsService);
+//		auth.userDetailsService(myDBAuthenticationService); // authenitcation in dataBase
+		auth.authenticationProvider(authProvider());
 
 	}
 
