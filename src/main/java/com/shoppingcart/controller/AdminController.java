@@ -3,6 +3,7 @@ package com.shoppingcart.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import com.shoppingcart.dao.AccountDAO;
 import com.shoppingcart.dao.OrderDAO;
 import com.shoppingcart.dao.ProductDAO;
 import com.shoppingcart.entity.Account;
+import com.shoppingcart.entity.Product;
 import com.shoppingcart.model.AccountInfo;
 import com.shoppingcart.model.OrderDetailInfo;
 import com.shoppingcart.model.OrderInfo;
@@ -82,7 +84,7 @@ public class AdminController {
 	
 	@RequestMapping(value = {"/orderList"}, method = RequestMethod.GET)
 	public String orderList(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
-//		int page =1;
+//		int page = 1;
 //		try {
 //			page = Integer.parseInt(pageStr);
 //		} catch (Exception e) {
@@ -90,7 +92,7 @@ public class AdminController {
 //		}
 //		
 		final int MAX_RESULT = 5;
-		final int MAX_NAVIGATION_PAGE = 0;
+		final int MAX_NAVIGATION_PAGE = 10;
 		PaginationResult<OrderInfo> paginationOrderInfos = orderDAO.getAllOrderInfos(page, MAX_RESULT, MAX_NAVIGATION_PAGE);
 		model.addAttribute("paginationOrderInfos", paginationOrderInfos);
 		return "orderList";
@@ -111,6 +113,18 @@ public class AdminController {
 		model.addAttribute("orderInfo", orderInfo);
 		return "order";
 	}
+	
+//	@GetMapping(value = {"/deleteOrder"})
+//	public String DeleteOrderView(Model model, @RequestParam("orderId") String orderId) {
+//		OrderInfo orderInfo = null;
+//		orderDAO.DeleteOrderDetailsInfoById(orderId);
+//		orderDAO.DeleteOrderInfoById(orderId);
+//		
+//		return "redirect:/orderList";
+//		
+//		
+//		
+//	}
 	
 	// GET: show product
 	@RequestMapping(value = {"/product"}, method = RequestMethod.GET)
@@ -146,6 +160,20 @@ public class AdminController {
 		
 		return "redirect:/productList";
 		
+	}
+	
+	@RequestMapping({"/removeProduct"})
+	public String removeProductHandler(HttpServletRequest request, Model model, @RequestParam(value = "code", defaultValue = "") String code) {
+		Product product = null;
+		
+		if (code != null) {
+			product = productDAO.getProductByCode(code);
+		}
+		
+		if (product != null) {
+			productDAO.removeProductByCode(code);
+		}
+		return "redirect:/productList";
 	}
 	
 	@RequestMapping(value = {"/list"}, method = RequestMethod.GET)

@@ -7,21 +7,21 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Update User Form</title>
+<title>Update Account Form</title>
 </head>
 <body>
 	<div align = "center">
 		<h1>Account Management Application</h1>
 		<h2>
-			<a href="${pageContext.request.contextPath }/new">Add new user</a>
-			<a href="${pageContext.request.contextPath }/list">List all users</a>
+			<a href="${pageContext.request.contextPath }/new">Add new Account</a>
+			<a href="${pageContext.request.contextPath }/list">List all Accounts</a>
 		</h2>
 	</div>
 	
 	<c:url var="updateAction" value="/update"></c:url>
 	<div align="center">
 		<form123:form action="${updateAction }" method="post" modelAttribute="account">
-			<h2>Update User</h2>
+			<h2>Update Account</h2>
 			<table>
 			
 				<tr>

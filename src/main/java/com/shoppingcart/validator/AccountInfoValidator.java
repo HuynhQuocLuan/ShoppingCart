@@ -43,6 +43,13 @@ public class AccountInfoValidator implements Validator{
 			}
 		}
 		
+		String password = account.getPassword();
+		String passwordConfirm = account.getPasswordConfirm();
+		
+		if(!password.equals(passwordConfirm)) {
+			errors.rejectValue("password", "NotMatch.accountForm.password");
+		}
+		
 	}
 	
 	

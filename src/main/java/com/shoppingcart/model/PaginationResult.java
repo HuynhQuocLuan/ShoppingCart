@@ -19,7 +19,7 @@ public class PaginationResult <E>{ // E = ProductInfo
 	
 	private int totalPages;
 	
-	private int maxNavigationPage;
+	private int maxNavigationPages;
 	
 	private List<Integer> navigationPages;
 	
@@ -28,14 +28,14 @@ public class PaginationResult <E>{ // E = ProductInfo
 	}
 
 	public PaginationResult(int totalRecords, int currentPage, List<E> list, int maxResult, int totalPages,
-			int maxNavigationPage, List<Integer> navigationPages) {
+			int maxNavigationPages, List<Integer> navigationPages) {
 		super();
 		this.totalRecords = totalRecords;
 		this.currentPage = currentPage;
 		this.list = list;
 		this.maxResult = maxResult;
 		this.totalPages = totalPages;
-		this.maxNavigationPage = maxNavigationPage;
+		this.maxNavigationPages = maxNavigationPages;
 		this.navigationPages = navigationPages;
 	}
 
@@ -81,12 +81,12 @@ public class PaginationResult <E>{ // E = ProductInfo
 		this.totalPages = totalPages;
 	}
 
-	public int getMaxNavigationPage() {
-		return maxNavigationPage;
+	public int getMaxNavigationPages() {
+		return maxNavigationPages;
 	}
 
-	public void setMaxNavigationPage(int maxNavigationPage) {
-		this.maxNavigationPage = maxNavigationPage;
+	public void setMaxNavigationPages(int maxNavigationPages) {
+		this.maxNavigationPages = maxNavigationPages;
 	}
 
 	public List<Integer> getNavigationPages() {
@@ -135,9 +135,9 @@ public class PaginationResult <E>{ // E = ProductInfo
 		this.maxResult = maxResult;
 		
 		this.totalPages = (this.totalRecords / this.maxResult)+ 1;
-		this.maxNavigationPage = maxNavigationPage;
+		this.maxNavigationPages = maxNavigationPage;
 		if(maxNavigationPage < this.totalPages) {
-			this.maxNavigationPage = maxNavigationPage;
+			this.maxNavigationPages = maxNavigationPage;
 		}
 		this.calcNavigationPages();
 	}
@@ -148,8 +148,8 @@ public class PaginationResult <E>{ // E = ProductInfo
 		
 		int current = this.currentPage > this.totalPages ? this.totalPages : this.currentPage;
 		
-		int begin = current - this.maxNavigationPage / 2;
-		int end = current + this.maxNavigationPage /2;
+		int begin = current - this.maxNavigationPages / 2;
+		int end = current + this.maxNavigationPages /2;
 		
 		// Trang đầu tiên
 		this.navigationPages.add(1);

@@ -1,0 +1,61 @@
+@charset "ISO-8859-1";
+*{
+	padding: 0;
+	margin: 0;
+	font-family: sans-serif;
+}
+
+/*background*/
+body{
+	color: #fff;
+}
+
+/*tên của cả class chứa form ví dụ
+<div class="create-account-form" align="center">
+*/
+.create-account-form {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 350px;
+}
+
+/*tựa của form như <h2>New Accounts</h2> */
+.create-account-form h2{
+	font-size: 20px;
+	text-align: center;
+	text-transform: uppercase;
+	margin: 30px 0;
+}
+
+/*tên của <th><p>User Name:</p></th> có gì anh thêm cái p ngay mấy phần nhứ password name roles luôn*/
+.create-account-form p{
+	font-size: 18px;
+	margin: 15px 0;
+}
+
+/*tên của dòng input <td><input type="text" name="user_name" placeholder="Username"></td> */
+.create-account-form input{
+	font-size: 16px;
+	padding: 15px 10px;
+	width: 100%;
+	border: 0;
+	border-radius: 5px;
+	outline: none;
+}
+
+/*tên của nút submit hay tạo <td colspan="2" align="center">
+					<button type="submit" name="Save">Save</button>
+					</td>*/ 
+.create-account-form button{
+	font-size: 18px;
+	font-weight: bold;
+	margin: 20px 0;
+	padding: 10px 15px;
+	width: 50%;
+	border: 0;
+	border-radius: 5px;
+	background-color: #fff;
+}
+

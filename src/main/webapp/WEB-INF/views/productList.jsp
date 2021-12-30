@@ -28,6 +28,22 @@
 	
 	<div class ="page-title">Product List</div>
 	
+	<form method="GET" action="${contextPath}/productList"> <!-- /insert?name=Tom&age=10    /productList?name=qwe -->
+		<table>
+			<tr>
+				<td>SEARCH </td>
+				</br>
+				<td>by name or code: </td>
+				<td><input type="text" name="name"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<input type="submit" value="Search">
+				</td>
+			</tr>
+		</table>
+	</form>
+
 	<c:forEach items="${paginationProductInfos.list }" var="productInfo">
 		<div class = "product-preview-container">
 			<ul>
@@ -45,6 +61,11 @@
 				<security:authorize access="hasRole('ROLE_MANAGER')">
 					<li>
 						<a style = "color: red;" href="${contextPath }/product?code=${productInfo.code}">Edit Product</a>
+						<li>
+							<a style = "color: red;" href="${contextPath }/removeProduct?code=${productInfo.code}">Delete Product</a>
+						</li>
+						 
+					
 					</li>
 				</security:authorize>
 			</ul>

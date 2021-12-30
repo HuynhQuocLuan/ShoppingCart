@@ -88,6 +88,8 @@ public class MainController {
 		return "redirect:/shoppingCart";
 	}
 	
+	
+	
 	// GET: Hiển thị giỏ hàng.
 	@RequestMapping(value = {"/shoppingCart"}, method = RequestMethod.GET)
 	public String shoppingCartHandler(HttpServletRequest request, Model model) {

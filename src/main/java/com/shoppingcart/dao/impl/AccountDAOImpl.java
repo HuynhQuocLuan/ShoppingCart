@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,11 +68,21 @@ public class AccountDAOImpl implements AccountDAO {
 			query.setParameter("password_hql", account.getPassword());
 			query.setParameter("userRole_hql", account.getUserRole());
 			query.setParameter("userName_hql", account.getUserName());
-//			account.setPassword(encoder.encode(account.getPassword()));
+//			String password = account.getPassword();
+//			String passwordencrypted = encoder.encode(account.getPassword());
+//			boolean isPasswordMatch = encoder.matches(password, passwordencrypted);
+//			if(isPasswordMatch) {
+//				session.update(account);
+//				System.out.println(isPasswordMatch);
+//			}else {
+//				account.setPassword(encoder.encode(account.getPassword()));
+//				session.update(account);
+//			}
+			account.setPassword(encoder.encode(account.getPassword()));
 			session.update(account);
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println(e.getMessage());
 		}
 		return false;
 	}

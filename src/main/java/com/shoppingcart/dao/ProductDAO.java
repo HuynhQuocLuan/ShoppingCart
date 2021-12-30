@@ -13,5 +13,7 @@ public interface ProductDAO {
 	public ProductInfo getProductInfoByCode(String code);
 	
 	public void saveProductInfo(ProductInfo productInfo);
+	
+	public boolean removeProductByCode(String code);
 
 }

@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.authorizeRequests().antMatchers("/orderList", "/order","/accountInfo").access("hasAnyRole('EMPLOYEE', 'MANAGER')");
-
+//		http.authorizeRequests().antMatchers("/productList","/order").access("hasAnyRole('CUSTOMER')");
 		http.authorizeRequests().antMatchers("/product").access("hasRole('MANAGER')");
 
 		// denied query

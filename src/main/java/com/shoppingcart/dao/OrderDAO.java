@@ -16,5 +16,9 @@ public interface OrderDAO {
 	public OrderInfo getOrderInfoById(String orderId);
 	
 	public List<OrderDetailInfo> getAllOrderDetailInfos(String orderId);
+	
+//	public boolean DeleteOrderInfoById(String orderId);
+//	
+//	public boolean DeleteOrderDetailsInfoById(String orderId);
 
 }

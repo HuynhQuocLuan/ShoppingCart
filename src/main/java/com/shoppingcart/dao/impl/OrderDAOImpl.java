@@ -89,7 +89,7 @@ public class OrderDAOImpl implements OrderDAO{
 	public PaginationResult<OrderInfo> getAllOrderInfos(int page, int maxResult, int maxNavigationPage) {
 		Session session = sessionFactory.getCurrentSession();
 		String hql = "SELECT NEW " + OrderInfo.class.getName() + " (ORD.id, ORD.orderDate, ORD.orderNum, ORD.amount, ORD.customerName, ORD.customerAddress, "
-				+ "ORD.customerEmail, ORD.customerPhone) FROM Order ORD ORDER BY ORD.orderNum ASC"; // DESC: 
+				+ "ORD.customerEmail, ORD.customerPhone) FROM Order ORD ORDER BY ORD.orderNum DESC"; // ASC: 
 		Query<OrderInfo> query = session.createQuery(hql);
 		return new PaginationResult<OrderInfo>(query, page, maxResult, maxNavigationPage);
 	}
@@ -127,6 +127,39 @@ public class OrderDAOImpl implements OrderDAO{
 		List<OrderDetailInfo> orderDetailInfos = query.list();
 		return orderDetailInfos;
 	}
+
+//	@Override
+//	public boolean DeleteOrderDetailsInfoById(String orderId) {
+//		 try {
+//			Session session = sessionFactory.getCurrentSession();
+//			String hql = "DELETE OrderDetail ORD WHERE ORD.id = :orderId_hql";
+//			Query query = session.createQuery(hql);
+//			query.setParameter("orderId_hql", orderId);
+//			query.executeUpdate();
+//		return true;
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		}
+//
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean DeleteOrderInfoById(String orderId) {
+//		try {
+//			Session session = sessionFactory.getCurrentSession();
+//			String hql = "DELETE Order ORD WHERE ORD.id = :orderId_hql";
+//			Query query = session.createQuery(hql);
+//			query.setParameter("orderId_hql", orderId);
+//			query.executeUpdate();
+//			return true;
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		}
+//		return false;
+//	}
+	
+	
 	
 	
 	

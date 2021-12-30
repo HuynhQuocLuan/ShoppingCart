@@ -8,14 +8,18 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Customer List</title>
+<style type="text/css">
+  <%@include file="css/styles.css" %> 
+</style>
 </head>
 <body>
+	<jsp:include page = "_menu.jsp"/>
 	<div align="center">
-		<h1>User Management Application</h1>
+		<h1>Account Management</h1>
 		
 		<h2>
-			<a href="${contextPath}/new">Add New User</a>
-			<a href="${contextPath }/list">List All Users</a>
+			<a href="${contextPath}/new">Add New Account</a>
+			<a href="${contextPath }/list">List All Accounts</a>
 		</h2>
 		
 	</div>

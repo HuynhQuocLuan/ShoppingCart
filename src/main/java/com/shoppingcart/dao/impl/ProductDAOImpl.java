@@ -18,8 +18,8 @@ import com.shoppingcart.model.ProductInfo;
 
 @Repository
 @Transactional
-public class ProductDAOImpl implements ProductDAO{
-	
+public class ProductDAOImpl implements ProductDAO {
+
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -27,14 +27,14 @@ public class ProductDAOImpl implements ProductDAO{
 	public PaginationResult<ProductInfo> getAllProductInfos(int page, int maxResult, int maxNavigationPage,
 			String likeName) {
 		Session session = sessionFactory.getCurrentSession();
-		//SELECT PRO.code, PRO.name, PRO.price FROM Product PRO
+		// SELECT PRO.code, PRO.name, PRO.price FROM Product PRO
 		String hql = "SELECT NEW " + ProductInfo.class.getName() + " (PRO.code, PRO.name, PRO.price) FROM Product PRO";
-		
+
 		if (likeName != null && likeName.length() > 0) {
-			hql += " WHERE LOWER(PRO.name) LIKE :LIKENAME ";
+			hql += " WHERE LOWER(PRO.name) LIKE :LIKENAME OR LOWER(PRO.code) LIKE :LIKENAME"; // search by name --> PRO.name, search by code --> PRO.code
 		}
 		hql += " ORDER BY PRO.createDate DESC ";
-		
+
 //		instead of 
 //		Query<Product> query = session.createQuery(hql);
 //		List<Product> products = query.getResultList();
@@ -46,17 +46,15 @@ public class ProductDAOImpl implements ProductDAO{
 //			productInfo.setPrice(product.getPrice());
 //			productInfos.add(productInfo);
 //		}
-		
-		
+
 		Query<ProductInfo> query = session.createQuery(hql);
-		if(likeName != null && likeName.length() >0) {
+		if (likeName != null && likeName.length() > 0) {
 			query.setParameter("LIKENAME", "%" + likeName.toLowerCase() + "%");
 //			PaginationResult<ProductInfo> paginationResult = new PaginationResult(query, page, maxResult, maxNavigationPage);
 //			return paginationResult;
 		}
-		return new PaginationResult<ProductInfo>(query, page, maxResult, maxNavigationPage); 
-		
-		
+		return new PaginationResult<ProductInfo>(query, page, maxResult, maxNavigationPage);
+
 	}
 
 	@Override
@@ -85,7 +83,7 @@ public class ProductDAOImpl implements ProductDAO{
 		String code = productInfo.getCode();
 		Product product = null;
 		boolean isNew = false;
-		
+
 		if (code != null) {
 			product = getProductByCode(code);
 		}
@@ -97,18 +95,33 @@ public class ProductDAOImpl implements ProductDAO{
 		product.setCode(code);
 		product.setName(productInfo.getName());
 		product.setPrice(productInfo.getPrice());
-		
+
 		if (productInfo.getFileData() != null) {
-			byte [] image = productInfo.getFileData().getBytes();
-			if(image != null && image.length >0) {
+			byte[] image = productInfo.getFileData().getBytes();
+			if (image != null && image.length > 0) {
 				product.setImage(image);
 			}
 		}
-		if(isNew) {
+		if (isNew) {
 			session.persist(product);
 		}
 		// If fail in database, it will throw out exception immedately
 		session.flush();
+	}
+
+	@Override
+	public boolean removeProductByCode(String code) {
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			String hql = "DELETE FROM Product PRO WHERE PRO.code = :code1";
+			Query query = session.createQuery(hql);
+			query.setParameter("code1", code);
+			query.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
 	}
 
 	

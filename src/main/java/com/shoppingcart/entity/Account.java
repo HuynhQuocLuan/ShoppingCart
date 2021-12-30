@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Accounts")
@@ -23,9 +24,21 @@ public class Account implements Serializable {
 	@Column(name = "Name", length = 225, nullable = false)
 	private String name;
 	
-	@Column(name = "Password", length = 20, nullable = false)
+	@Column(name = "Password", length = 225, nullable = false)
 	private String password;
 	
+	@Column(name = "PasswordConfirm", length = 225, nullable = false)
+	@Transient
+	private String passwordConfirm;
+	
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
+
 	@Column(name = "Active", length = 1, nullable = false)
 	private boolean active = true;
 	

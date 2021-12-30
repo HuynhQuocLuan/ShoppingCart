@@ -6,16 +6,17 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/css/accountForm.css"/>
 <head>
 <meta charset="ISO-8859-1">
 <title>User Form</title>
 </head>
 <body>
-	<div align = "center">
-		<h1>User Management Application</h1>
+	<div class="create-account-form" align = "center">
+		<h1>Account Management</h1>
 		<h2>
-			<a href="${contextPath}/new">Add New User</a>
-			<a href="${contextPath}/list">List All Users</a>
+			<a href="${contextPath}/new">Add New Account</a>
+			<a href="${contextPath}/list">List All Accounts</a>
 		</h2>
 	</div>
 	<div align="center">
@@ -24,7 +25,7 @@
 	<%-- <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form123"%> --%>
 	
 	<form123:form action="insert" method="post" modelAttribute="account">
-			<h2>Add New User</h2>
+			<h2>Add New Account</h2>
 			<table>			
 				<%-- <tr>
 				<th>ID: </th>
@@ -33,26 +34,31 @@
 				
 				</tr> --%>
 				<tr>
-					<th>Your Name: </th>
+					<th><p>Your Name:</p> </th>
 					<th><form123:input path="name"/></th>
 					<td><form123:errors path="name" cssClass="error"/></td>
 					
 					
 				</tr>
 				<tr>
-					<th>Username: </th>
+					<th><p>Username:</p> </th>
 					<th><form123:input path="userName"/></th>
 					<td><form123:errors path="userName" cssClass="error"/></td>
 					
 					
 				</tr>
 				<tr>
-					<th>Password: </th>
-					<th><form123:input path="password"/></th>
+					<th><p>Password:</p> </th>
+					<th><form123:input path="password" type = "password"/></th>
 					<th><form123:errors path="password" cssClass="error"/></th>	
 				</tr>
 				<tr>
-					<th align = "right">Role: </th>
+					<th><p>Password Confirm:</p> </th>
+					<th><form123:input path="passwordConfirm" type = "password"/></th>
+					<th><form123:errors path="passwordConfirm" cssClass="error"/></th>	
+				</tr>
+				<tr>
+					<th align = "right"><p>Role: </p></th>
 					<c:forEach items = "${roles }" var = "role">
 						<td><form123:radiobutton path ="userRole" value ="${role }"
 									label = "${role }" checked="${role == 'EMPLOYEE'}"/></td>
@@ -61,7 +67,7 @@
 					<th><form123:input type="radio" path="userRole" value = "EMPLOYEE"/>Employee</th> --%>
 				</tr>
 				<tr>
-					<td><input type="submit" name="save" value="create"/></td>
+					<td><button type="submit" name="save" value="create">Create</button></td>
 				</tr>
 			</table>
 		</form123:form>

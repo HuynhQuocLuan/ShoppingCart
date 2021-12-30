@@ -48,12 +48,13 @@
 				</td>
 				<td>
 					<a href ="${contextPath }/order?orderId=${orderInfo.id}">View</a>
+					<%-- <a href ="${contextPath }/deleteOrder?orderId=${orderInfo.id}">Delete</a> --%>
 				</td>
 			</tr>
 		</c:forEach>
 	</table>
 	
-	<c:if test="${paginationOrderInfos.totalPages > 1 }">
+	<%-- <c:if test="${paginationOrderInfos.totalPages > 1 }">
 		<div class = "page-navigator">
 			<c:forEach	items = "${paginationOrderInfos.navigationPages}" var = "page">
 				<c:if test = "${page != -1 }">
@@ -64,7 +65,22 @@
 				</c:if>
 			</c:forEach>
 		</div>
+	</c:if> --%>
+	
+	<c:if test="${paginationOrderInfos.totalPages > 1 }">
+		<div class="page-navigator">
+
+			<c:forEach items="${paginationOrderInfos.navigationPages }" var="page">
+				<c:if test="${page != -1 }">
+					<a href="orderList?page=${page }" class="nav-item">${page }</a>
+				</c:if>
+				<c:if test="${page == -1 }">
+					<span class="nav-item">...</span>
+				</c:if>
+			</c:forEach>
+		</div>
 	</c:if>
+	
 	<jsp:include page= "_footer.jsp" />
 </body>
 </html>

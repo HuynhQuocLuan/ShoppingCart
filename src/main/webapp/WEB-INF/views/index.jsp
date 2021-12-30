@@ -22,14 +22,15 @@
 	<jsp:include page = "_menu.jsp"/>
 	
 	<div class  = "page-title">Shopping Cart</div>
+	</br>
 	
-	<div class = "demo-conainer">
+	<div class = "demo-container">
 		<h3>Content</h3>
 		
 		<ul>
-			<li>Buy Online</li>
-			<li>Admin pages</li>
-			<li>Reports</li>
+			<a href="#"> <li>Buy Online</a></li>
+			<a href="#"><li>About Us</a></li>
+			<a href="#"><li>Reports</a></li>
 		</ul>
 	</div>
 	<jsp:include page="_footer.jsp"/>
